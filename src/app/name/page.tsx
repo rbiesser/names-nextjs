@@ -27,7 +27,7 @@ export default async function Page({ searchParams }: Props) {
   const countOfMaleNames = nameByYOB.filter((name) => name.gender === "M");
   const countOfFemaleNames = nameByYOB.filter((name) => name.gender === "F");
 
-  console.log(nameByYOB);
+  // console.log(nameByYOB);
 
   return (
     <div className={styles.container}>
@@ -41,7 +41,7 @@ export default async function Page({ searchParams }: Props) {
             label: `${name}, M`,
             data: countOfMaleNames.map((v) => ({
               x: v.yob,
-              y: v._sum.count,
+              y: v._sum.count || 0,
               // id: v.yob,
             })),
           },
@@ -49,7 +49,7 @@ export default async function Page({ searchParams }: Props) {
             label: `${name}, F`,
             data: countOfFemaleNames.map((v) => ({
               x: v.yob,
-              y: v._sum.count,
+              y: v._sum.count || 0,
               // id: v.yob,
             })),
           },
