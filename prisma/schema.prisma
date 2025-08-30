@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model all_names_by_state {
+  state                                     String @db.VarChar(50)
+  gender                                    String @db.VarChar(50)
+  yob                                       Int
+  name                                      String @db.VarChar(50)
+  count                                     Int
+  name_all_names_by_state_name_genderToname name   @relation("all_names_by_state_name_genderToname", fields: [name, gender], references: [name, gender], onUpdate: Restrict, map: "all_names_by_state_name_fk")
+  state_all_names_by_state_stateTostate     state  @relation("all_names_by_state_stateTostate", fields: [state], references: [abbr], onUpdate: Restrict, map: "state_FK")
+
+  @@unique([state, gender, yob, name], map: "all_names_by_state_unique")
+}
+
+model name {
+  name                                                    String               @db.VarChar
+  gender                                                  String               @db.VarChar
+  all_names_by_state_all_names_by_state_name_genderToname all_names_by_state[] @relation("all_names_by_state_name_genderToname")
+
+  @@id([name, gender], map: "name_pk")
+}
+
+model state {
+  abbr                                               String               @id(map: "state_pk") @db.VarChar
+  name                                               String               @db.VarChar
+  all_names_by_state_all_names_by_state_stateTostate all_names_by_state[] @relation("all_names_by_state_stateTostate")
+}
